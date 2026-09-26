@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>to do</title>
+    <style>
+/* 1. Varsayılan Açık Tema Değişkenleri :root Seviyesine Tanımlandı */
+:root {
+    --b: #fff;                  /* Kart açık arka planı */
+    --t: #002765;               /* Açık mod başlık rengi */
+    --li-t: #202020;            /* Açık mod liste yazısı rengi */
+    --row-bg: #edeef0;          /* Açık mod input satırı arka planı */
+    --input-color: #202020;     /* Açık mod input yazı rengi */
+    --ba: linear-gradient(135deg, #153677, #4e085f); /* Açık mod genel arka plan */
+}
+
+/* 2. :root "data-theme" Niteliğini Aldığında Tüm Sayfa Değişkenleri Güncellenir */
+:root[data-theme="dark"] {
+    --ba: linear-gradient(315deg, #15367787, #4e085f7a); /* Koyu mod genel arka plan */
+    --b: #2c2c2e;               /* Kart koyu arka planı */
+    --t: #ffffff;               /* Koyu mod başlık rengi */
+    --li-t: #f2f2f7;            /* Koyu mod liste yazısı rengi */
+    --row-bg: #3a3a3c;          /* Koyu mod input satırı arka planı */
+    --input-color: #ffffff;     /* Koyu mod input yazı rengi */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+.container {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--ba);
+    padding: 10px;
+    transition: background 0.3s;
+}
+.g {
+    transform: rotate(-35deg);
+    transform-origin: center;
+    transform-box: fill-box;
+    margin: 1px 0 0 -9px;
+}
+.todo-app {
+    width: 100%;
+    max-width: 540px;
+    background-color: var(--b);
+    margin: 100px auto 20px;
+    padding: 40px 30px 70px;
+    border-radius: 10px;
+    transition: background 0.3s;
+    position: relative;
+}
+.todo-app h2 {
+    color: var(--t);
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.svg {
+    display: inline-flex;
+    margin: 0 26px 0 6px;
+    align-items: center;
+}
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--row-bg);
+    border-radius: 30px;
+    padding: 0 0 0 20px;
+    margin-top: 25px;
+    transition: background 0.3s;
+}
+input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px;
+    font-size: 14px;
+    width: 100%;
+    color: var(--input-color);
+}
+button {
+    border: none;
+    outline: none;
+    padding: 16px 50px;
+    background: #ff5945;
+    color:#fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 0 30px 30px 0;
+}
+.list-container {
+    margin-top: 20px;
+    padding: 0;
+}
+ul li {
+    list-style: none;
+    font-size: 17px;
+    padding: 12px 8px 12px 50px;
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+    border-bottom: 1px solid #8989894d;
+    color: var(--li-t);
+}
+ul li:last-child{
+    border: none;
+}
+ul li::before {
+    content: '';
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: #8585857d solid 2px;
+}
+ul li.checked {
+    color: #8a8a8f;
+    text-decoration: line-through;
+}
+ul li.checked::before {
+    content: '\2713';
+    color: #fff;
+    font-weight: bold;
+    line-height: 20px;
+    text-align: center;
+    background: #ff5945;
+    border: #ff5945 solid 2px;
+}
+input.input::placeholder{
+    color:#ec7373;
+}
+ul li span{
+    position: absolute;
+    right: 0;
+    top: 5px;
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+    color: var(--t);
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+}
+ul li span:hover{
+    background: #7d7d7d40;
+}
+#theme-toggle {
+    background: none;
+    padding: 0;
+    width: auto;
+    cursor: pointer;
+    font-size: 20px;
+    position: absolute;
+    right: 20px;
+    width: 40px;
+}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="todo-app" id="todo-card">
+        <h2>To-Do List 
+            <div class="svg">
+                <svg xmlns="http://w3.org" height="28px" viewBox="0 -960 960 960" width="28px" fill="#e5b375"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm80-160h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Z"/></svg>
+                <svg class="g" xmlns="http://w3.org" height="24px" viewBox="0 -960 960 960" width="24px" fill="#7A2917"><path d="M120-120v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm584-528 56-56-56-56-56 56 56 56Z"/></svg>
+                
+                <!-- KARANLIK MOD BUTONU -->
+                <button id="theme-toggle">🌙</button>
+            </div>
+        </h2>
+        <div class="row">
+            <input type="text" id="input-box" placeholder="Add your text">
+            <button onclick="addTask()">Add</button>
+        </div>
+        <ul id="list-container" class="list-container">
+        </ul>
+    </div>
+</div>
+
+<script>
+const inputBox = document.getElementById("input-box");
+const listContainer = document.getElementById("list-container");
+const themeToggle = document.getElementById("theme-toggle");
+
+// Sayfa açıldığında hafızadaki tema durumunu doğrudan :root elementine yükle
+if (localStorage.getItem("card-theme") === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+    themeToggle.innerHTML = "☀️";
+}
+
+// Butona basıldığında :root üzerindeki temayı değiştir ve hafızaya kaydet
+themeToggle.addEventListener("click", () => {
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    
+    if (!isDark) {
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.setItem("card-theme", "dark");
+        themeToggle.innerHTML = "☀️";
+    } else {
+        document.documentElement.removeAttribute("data-theme");
+        localStorage.setItem("card-theme", "light");
+        themeToggle.innerHTML = "🌙";
+    }
+});
+
+function addTask() {
+    if (inputBox.value.trim() === '') {
+        inputBox.placeholder = "You must write something!";
+        inputBox.classList.add('input'); 
+    } else {
+        let li = document.createElement("li");
+        li.innerHTML = inputBox.value;
+        listContainer.appendChild(li);
+        
+        inputBox.value = '';
+        inputBox.placeholder = "Add your text";
+        inputBox.classList.remove('input'); 
+        
+        let span = document.createElement("span");
+        span.innerHTML = "\u00d7";
+        li.appendChild(span);
+        saveData();
+    }
+}
+
+listContainer.addEventListener("click", function(e){
+    if(e.target.tagName === "LI"){
+        e.target.classList.toggle("checked");
+        saveData();
+    }
+    else if(e.target.tagName === "SPAN"){
+        e.target.parentElement.remove();
+        saveData();
+    }
+}, false);
+
+inputBox.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        addTask();
+    }
+});
+
+function saveData(){
+    localStorage.setItem("data", listContainer.innerHTML);
+}
+
+function showtask(){
+    listContainer.innerHTML = localStorage.getItem("data");
+}
+showtask();
+</script>
+</body>
+</html>
